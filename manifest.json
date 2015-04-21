@@ -1,0 +1,26 @@
+{
+  "manifest_version": 2,
+  "name": "WebMirror",
+  "short_name": "WebMirror",
+  "description": "This is a tool to Mirror any website. Designed By: Pradatta",
+  "version": "0.0.2",
+  "minimum_chrome_version": "38",
+
+  "icons": {
+    "16": "assets/icon_16.png",
+    "128": "assets/icon_128.png"
+  },
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "<all_urls>"
+  ],
+  "background": {
+    "scripts": ["js/background.js"],
+    "persistent": false
+  },
+  "browser_action": {
+    "default_title": "Make this page Mirrored",
+    "default_icon": "assets/icon_16_off.png"
+  }
+}
