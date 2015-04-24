@@ -2,10 +2,15 @@
  * Created by PRADATTA on 19-Apr-15.
  */
 var toggle = false;
-chrome.browserAction.onClicked.addListener(function (tab) {
-    toggle = !toggle;
-    setIcon(toggle, tab.id);
-    toggleMirrorPage(toggle, tab.id);
+chrome.browserAction.onClicked.addListener(function (details) {
+    if(details.url.indexOf("chrome")!==0) {
+        toggle = !toggle;
+        setIcon(toggle, details.id);
+        toggleMirrorPage(toggle, details.id);
+    } else{
+        console.log("This Extension can not work on Chrome's Internal Page !!");
+        alert("This Extension can not work on Chrome's Internal Page !!");
+    }
 });
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
@@ -26,7 +31,11 @@ function setIcon(toggleState, tabId) {
 
 function toggleMirrorPage(toggleState, tabId){
     if(toggleState)
-        chrome.tabs.executeScript(tabId, {file: "js/mirrorScript.js"});
+        chrome.tabs.executeScript(tabId, {file: "js/mirrorScript.js"}, function() {
+            console.log("WEb Page Mirrored ..");
+        });
     else
-        chrome.tabs.executeScript(tabId, {file: "js/deMirrorScript.js"});
+        chrome.tabs.executeScript(tabId, {file: "js/deMirrorScript.js"}, function() {
+            console.log("WEb Page De-Mirrored ..");
+        });
 }
