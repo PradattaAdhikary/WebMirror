@@ -5,14 +5,13 @@ var toggle = false;
 chrome.browserAction.onClicked.addListener(function (tab) {
     toggle = !toggle;
     setIcon(toggle, tab.id);
-    chrome.tabs.reload(tab.id);
+    toggleMirrorPage(toggle, tab.id);
 });
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     setIcon(toggle, tabId);
-    if (changeInfo.status == 'complete' && tab.active && toggle) {
-        chrome.tabs.executeScript(null, {file: "js/content_script.js"});
-
+    if (changeInfo.status == 'complete' && tab.active) {
+        toggleMirrorPage(toggle, tabId);
     }
 });
 
@@ -23,4 +22,11 @@ function setIcon(toggleState, tabId) {
     else {
         chrome.browserAction.setIcon({path: "assets/icon_16_off.png", tabId: tabId});
     }
+}
+
+function toggleMirrorPage(toggleState, tabId){
+    if(toggleState)
+        chrome.tabs.executeScript(tabId, {file: "js/mirrorScript.js"});
+    else
+        chrome.tabs.executeScript(tabId, {file: "js/deMirrorScript.js"});
 }
